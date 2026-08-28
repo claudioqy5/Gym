@@ -13,27 +13,51 @@ const handleLogin = async () => {
   isLoading.value = true
   
   try {
-    // Por ahora simularemos la respuesta de la API o dejaremos el fetch listo
-    /*
-    const response = await fetch('http://localhost:5000/api/auth/login', {
+    const response = await fetch('http://localhost:5243/api/auth/login', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ email: email.value, password: password.value })
     })
     
-    if (!response.ok) throw new Error('Credenciales incorrectas')
     const data = await response.json()
-    localStorage.setItem('token', data.token)
-    */
 
-    // Simulación temporal mientras conectamos el backend
-    if (email.value === 'admin@gym.com' && password.value === '123456') {
-       localStorage.setItem('token', 'dummy-token-123') // Guardamos un token de prueba
-       router.push('/')
-    } else {
-       throw new Error('Correo o contraseña incorrectos.')
+    if (!response.ok) {
+       throw new Error(data.message || 'Credenciales incorrectas')
     }
     
+    localStorage.setItem('token', data.token)
+    localStorage.setItem('user', JSON.stringify(data.user))
+    router.push('/')
+    
+  } catch (err) {
+    errorMsg.value = err.message
+  } finally {
+    isLoading.value = false
+  }
+}
+
+const handleCreateDefaultUser = async () => {
+  errorMsg.value = ''
+  isLoading.value = true
+  try {
+    const response = await fetch('http://localhost:5243/api/users', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        Name: "Administrador Inicial",
+        Email: "admin@gym.com",
+        PasswordHash: "123456",
+        Phone: "123456789",
+        Role: "admin"
+      })
+    })
+
+    if (!response.ok) {
+       const data = await response.json()
+       throw new Error(data.message || 'Error al crear usuario por defecto')
+    }
+    
+    alert('Usuario administrador creado correctamente (admin@gym.com / 123456). Ya puedes iniciar sesión.')
   } catch (err) {
     errorMsg.value = err.message
   } finally {
@@ -82,6 +106,13 @@ const handleLogin = async () => {
         <button type="submit" class="btn btn-block" :disabled="isLoading">
           {{ isLoading ? 'Ingresando...' : 'Iniciar Sesión' }}
         </button>
+
+        <div style="margin-top: 1.5rem; text-align: center; border-top: 1px solid var(--border-color); padding-top: 1rem;">
+          <p style="font-size: 0.8rem; color: var(--text-muted); margin-bottom: 0.5rem;">¿Primera vez instalando el sistema?</p>
+          <button type="button" class="btn-outline btn-block" @click="handleCreateDefaultUser" :disabled="isLoading" style="font-size: 0.85rem; padding: 0.5rem;">
+            Crear Administrador Inicial
+          </button>
+        </div>
       </form>
     </div>
   </div>

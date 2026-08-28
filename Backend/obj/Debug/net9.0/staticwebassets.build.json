@@ -1,12 +1,1 @@
-{
-  "Version": 1,
-  "Hash": "3YG+YmD0f6PvFRJZ+xeIYYH3viDmiiR5AviuDkSPtk4=",
-  "Source": "GymSystemAPI",
-  "BasePath": "_content/GymSystemAPI",
-  "Mode": "Default",
-  "ManifestType": "Build",
-  "ReferencedProjectsConfiguration": [],
-  "DiscoveryPatterns": [],
-  "Assets": [],
-  "Endpoints": []
-}
+{"Version":1,"Hash":"UxRydfvpwb7AncVwFpxDNfYG0so/A1lzTqK8cWhNCsE=","Source":"GymSystemAPI","BasePath":"/","Mode":"Root","ManifestType":"Build","ReferencedProjectsConfiguration":[],"DiscoveryPatterns":[],"Assets":[],"Endpoints":[]}
